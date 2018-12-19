@@ -37,7 +37,9 @@ class MineSweeper
   end
 
   def valid_input?(input)
-    input.length == 2 && input.all? { |el| el.is_a? Integer }
+    input.length == 2 &&
+      input.all? { |el| el.is_a? Integer } &&
+      input.all? { |el| el.between?(0, @board.minefield.length) }
   end
 
   def mined?(input)
