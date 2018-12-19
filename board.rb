@@ -18,4 +18,12 @@ class Board
       @minefield[x][y] = 'B'.red
     end
   end
+
+  def random_position
+    [rand(@minefield.length), rand(@minefield.length)]
+  end
+
+  def empty_position?(row, col)
+    @minefield[row][col] == '*'
+  end
 end
