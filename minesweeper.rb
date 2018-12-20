@@ -45,7 +45,11 @@ class MineSweeper
   def valid_input?(input)
     input.length == 2 &&
       input.all? { |el| el.is_a? Integer } &&
-      input.all? { |el| el.between?(0, @board.minefield.length) }
+      input.all? { |el| el.between?(0, board_size) }
+  end
+
+  def board_size
+    @board.minefield.length - 1
   end
 
   def mined?(position)
