@@ -16,10 +16,15 @@ class MineSweeper
   end
 
   def play
-    system('clear')
-    render_minefield
+    position = nil
+    until position && mined?(position)
+      system('clear')
+      render_minefield
 
-    position_input
+      position = position_input
+      reveal(position)
+    end
+    game_over
   end
 
   def game_over
