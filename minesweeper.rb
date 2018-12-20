@@ -4,8 +4,8 @@ require 'colorize'
 class MineSweeper
   attr_reader :board
 
-  def initialize(grid_size, num_mines = grid_size)
-    @board = Board.new(grid_size, num_mines)
+  def initialize(board_size = 10, num_mines = board_size)
+    @board = Board.new(board_size, num_mines)
   end
 
   def render_minefield
