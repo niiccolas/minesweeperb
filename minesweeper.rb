@@ -10,7 +10,7 @@ class MineSweeper
 
   def render_minefield
     @board.minefield.each do |row|
-      row.each { |square| print square }
+      row.each { |square| print square.content }
       puts
     end
   end
