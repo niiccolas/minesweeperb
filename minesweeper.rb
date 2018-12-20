@@ -48,9 +48,9 @@ class MineSweeper
       input.all? { |el| el.between?(0, @board.minefield.length) }
   end
 
-  def mined?(input)
-    row, col = [input]
-    board[row, col] == 'B'
+  def mined?(position)
+    row, col = position
+    @board.minefield[row][col].mined?
   end
 end
 
