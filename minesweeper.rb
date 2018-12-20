@@ -59,6 +59,11 @@ class MineSweeper
     row, col = position
     @board.minefield[row][col].mined?
   end
+
+  def reveal(position)
+    row, col = position
+    @board.minefield[row][col].reveal
+  end
 end
 
 ms = MineSweeper.new(5)
