@@ -36,10 +36,13 @@ class MineSweeper
     puts  "\nPlease enter a position on the board (e.g., '0,2')"
     print '> '
 
-    until valid_input?(gets.chomp.split(',').map(&:to_i))
-      puts 'Error! Enter two numbers, separated by a comma'.red
+    position = gets.chomp.split(',').map(&:to_i)
+    until position && valid_input?(position)
+      puts "ERROR! Enter two comma separated numbers, each between 0 and #{board_size}".red
       print '> '
+      position = gets.chomp.split(',').map(&:to_i)
     end
+    position
   end
 
   def valid_input?(input)
