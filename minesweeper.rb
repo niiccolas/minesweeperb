@@ -1,4 +1,5 @@
 require_relative 'board'
+require 'colorize'
 
 class MineSweeper
   attr_reader :board
@@ -22,7 +23,7 @@ class MineSweeper
   end
 
   def game_over
-    puts 'Game over!'.yellow
+    puts '💥 You stepped on a mine! Game over'.red
     exit
   end
 
