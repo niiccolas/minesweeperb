@@ -46,6 +46,17 @@ class MineSweeper
       puts "ERROR! Enter two comma separated numbers, each between 0 and #{board_size}".red
       print '> '
       position = gets.chomp.split(',').map(&:to_i)
+        redo
+      end
+
+      if revealed?(position)
+        puts 'Position already revealed! Try again'.red
+        print '> '
+        position = gets.chomp.split(',').map(&:to_i)
+        redo
+      else
+        break
+      end
     end
     position
   end
