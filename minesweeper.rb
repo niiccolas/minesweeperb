@@ -42,10 +42,11 @@ class MineSweeper
     print '> '
 
     position = gets.chomp.split(',').map(&:to_i)
-    until position && valid_input?(position)
-      puts "ERROR! Enter two comma separated numbers, each between 0 and #{board_size}".red
-      print '> '
-      position = gets.chomp.split(',').map(&:to_i)
+    loop do
+      unless valid_input?(position)
+        puts "ERROR! Enter two comma separated numbers, each between 0 and #{board_size}".red
+        print '> '
+        position = gets.chomp.split(',').map(&:to_i)
         redo
       end
 
