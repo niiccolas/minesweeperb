@@ -52,12 +52,17 @@ class MineSweeper
   end
 
   def board_size
-    @board.minefield.length - 1
+    @board.grid_mines.length - 1
   end
 
   def mined?(position)
     row, col = position
-    @board.minefield[row][col].mined?
+    @board.grid_mines[row][col].mined?
+  end
+
+  def revealed?(position)
+    row, col = position
+    @board.grid_mines[row][col].revealed
   end
 
   def reveal(position)
