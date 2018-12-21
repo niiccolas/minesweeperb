@@ -32,6 +32,11 @@ class MineSweeper
     exit
   end
 
+  def mark_losing_position(position)
+    row, col = position
+    @board.grid_player[row][col] = @board.grid_mines[row][col].content.on_red
+  end
+
   def position_input
     puts  "\nPlease enter a position on the board (e.g., '0,2')"
     print '> '
