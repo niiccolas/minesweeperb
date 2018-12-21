@@ -38,7 +38,7 @@ class MineSweeper
   end
 
   def position_input
-    puts  "\nPlease enter a position on the board (e.g., '0,2')"
+    puts  "\nEnter a position (e.g., '0,2')"
     print '> '
 
     position = gets.chomp.split(',').map(&:to_i)
