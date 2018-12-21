@@ -24,8 +24,23 @@ class MineSweeper
       position = position_input
       reveal(position)
     end
-    game_over
+
+    game_over(position)
   end
+
+  def terminate_if_won
+    if @board.num_revealed == ((@board.board_size ** 2) -@board.num_mines)
+      puts "\nCongratulations, you won! ✌️"
+      exit
+    end
+  end
+
+  def game_over(position)
+    @board.grid_mines.each do |row|
+      row.each do |e|
+        reveal(e.coordinates) if e.mined?
+      end
+    end
 
   def game_over
     puts '💥 You stepped on a mine! Game over'.red
