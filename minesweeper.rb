@@ -67,7 +67,9 @@ class MineSweeper
 
   def reveal(position)
     row, col = position
-    @board.minefield[row][col].reveal
+    @board.num_revealed += 1
+    @board.grid_mines[row][col].reveal_tile
+    @board.grid_player[row][col] = @board.grid_mines[row][col].content
   end
 end
 
