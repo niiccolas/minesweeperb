@@ -2,7 +2,7 @@ require_relative 'tile'
 require 'colorize'
 
 class Board
-  attr_reader :grid_mines, :grid_player, :num_mines, :board_size
+  attr_reader   :grid_mines, :grid_player, :num_mines, :board_size
   attr_accessor :num_revealed_tiles
 
   def initialize(grid_size, num_mines)
@@ -13,6 +13,8 @@ class Board
     @grid_mines         = Array.new(grid_size) { Array.new(grid_size) { Tile.new } }
 
     plant_mines(num_mines)
+    count_adjacent_mines
+    save_coordinates
   end
 
   def plant_mines(num_mines)
