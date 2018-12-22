@@ -60,7 +60,7 @@ class MineSweeper
   end
 
   def terminate_if_won
-    if @board.num_revealed == ((@board.board_size**2) - @board.num_mines)
+    if @board.num_revealed_tiles == ((@board.board_size**2) - @board.num_mines)
       puts "\nCongratulations, you won! ✌️"
       exit
     end
@@ -132,7 +132,7 @@ class MineSweeper
 
   def reveal(position)
     row, col = position
-    @board.num_revealed += 1
+    @board.num_revealed_tiles += 1
     @board.grid_mines[row][col].reveal_tile
     @board.grid_player[row][col] = @board.grid_mines[row][col].content
   end
