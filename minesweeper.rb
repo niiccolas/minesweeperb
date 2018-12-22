@@ -19,7 +19,9 @@ class MineSweeper
     position = nil
     until position && mined?(position)
       system('clear')
-      render_minefield
+      render_grid_player
+      # render_grid_mines
+      terminate_if_won
 
       position = position_input
       reveal(position)
@@ -29,7 +31,7 @@ class MineSweeper
   end
 
   def terminate_if_won
-    if @board.num_revealed == ((@board.board_size ** 2) -@board.num_mines)
+    if @board.num_revealed == ((@board.board_size**2) - @board.num_mines)
       puts "\nCongratulations, you won! ✌️"
       exit
     end
