@@ -10,8 +10,8 @@ class MineSweeper
   end
 
   def render_grid_player
-    print "Minesweeperb"
-    puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec.\n\n"
+    print "Minesweeperb".green.on_black
+    puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec.\n".green.on_black
     print_col_header
 
     @board.grid_player.each_with_index do |row, index|
@@ -25,13 +25,22 @@ class MineSweeper
     print '   '
     (0..board_size).each do |num|
       print '  ' if num.zero?
-      print " #{num.to_s.black}".on_green
+      if num < 10
+        print "  #{num.to_s.black}".on_green
+      else
+        print " #{num.to_s.black}".on_green
+
+      end
     end
     puts
   end
 
   def print_row_header(index)
-    print '   ' + (' ' + index.to_s.black).on_green + ' '
+    if index < 10
+      print '   ' + (' ' + index.to_s.black).on_green + ' '
+    else
+      print '   ' + (index.to_s.black).on_green + ' '
+    end
   end
 
   def render_grid_mines
@@ -76,7 +85,7 @@ class MineSweeper
     system('clear')
     mark_losing_position(position)
     render_grid_player
-    puts "\nYou stepped on it! Game over"
+    puts "\nYou stepped on it! Game over".red.on_black
     puts && exit
   end
 
