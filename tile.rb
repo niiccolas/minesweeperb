@@ -51,6 +51,5 @@ class Tile
 
   def reveal_tile
     @revealed = true
-    @content = ' '
   end
 end
