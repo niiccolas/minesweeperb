@@ -44,9 +44,11 @@ class MineSweeper
       end
     end
 
-  def game_over
-    puts '💥 You stepped on a mine! Game over'.red
-    exit
+    system('clear')
+    mark_losing_position(position)
+    render_grid_player
+    puts "\nYou stepped on it! Game over"
+    puts && exit
   end
 
   def mark_losing_position(position)
