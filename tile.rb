@@ -3,7 +3,7 @@ class Tile
   attr_accessor :adjacent_mine_count, :content, :coordinates
 
   def initialize
-    @content             = '  '
+    @content             = '   '
     @revealed            = false
     @has_mine            = false
     @coordinates         = []
@@ -12,7 +12,7 @@ class Tile
 
   def plant_mine
     @has_mine = true
-    @content = '💩'
+    @content = ' 💩'
   end
 
   def count_adjacent_mine
@@ -23,21 +23,21 @@ class Tile
   def colorize_mine_count
     case @adjacent_mine_count
     when 1
-      @content = @adjacent_mine_count.to_s.light_blue + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.light_blue + ' '
     when 2
-      @content = @adjacent_mine_count.to_s.light_green + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.light_green + ' '
     when 3
-      @content = @adjacent_mine_count.to_s.light_red + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.light_red + ' '
     when 4
-      @content = @adjacent_mine_count.to_s.blue + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.blue + ' '
     when 5
-      @content = @adjacent_mine_count.to_s.green + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.green + ' '
     when 6
-      @content = @adjacent_mine_count.to_s.red + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.red + ' '
     when 7
-      @content = @adjacent_mine_count.to_s.magenta + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.magenta + ' '
     when 8
-      @content = @adjacent_mine_count.to_s.cyan + ' '
+      @content = ' ' + @adjacent_mine_count.to_s.cyan + ' '
     end
   end
 

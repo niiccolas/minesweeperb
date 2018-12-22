@@ -9,7 +9,7 @@ class Board
     @num_revealed_tiles = 0
     @num_mines          = num_mines
     @board_size         = grid_size
-    @grid_player        = Array.new(grid_size) { Array.new(grid_size) { '* ' } }
+    @grid_player        = Array.new(grid_size) { Array.new(grid_size) { ' * ' } }
     @grid_mines         = Array.new(grid_size) { Array.new(grid_size) { Tile.new } }
 
     plant_mines(num_mines)
@@ -45,7 +45,7 @@ class Board
   end
 
   def check_neighbours(row, col)
-    if grid_mines[row][col].content == '💩'
+    if grid_mines[row][col].content == ' 💩'
       (row - 1..row + 1).each do |row_index|
         # Skip row indices that are out of the board
         next if row_index < 0 || row_index > board_size - 1
@@ -57,7 +57,7 @@ class Board
                   # Skip current position
                   (row_index == row && col_index == col)
 
-          unless grid_mines[row_index][col_index].content == '💩'
+          unless grid_mines[row_index][col_index].content == ' 💩'
             grid_mines[row_index][col_index].count_adjacent_mine
           end
         end
