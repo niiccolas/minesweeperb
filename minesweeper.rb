@@ -5,11 +5,40 @@ class MineSweeper
   attr_reader :board
 
   def initialize(board_size = 10, num_mines = board_size)
-    @board = Board.new(board_size, num_mines)
+    @board        = Board.new(board_size, num_mines)
+    @time_started = Time.now
   end
 
-  def render_minefield
-    @board.minefield.each do |row|
+  def render_grid_player
+    print "Minesweeperb"
+    puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec.\n\n"
+    print_col_header
+
+    @board.grid_player.each_with_index do |row, index|
+      print_row_header(index)
+      row.each { |tile| print tile }
+      puts
+    end
+  end
+
+  def print_col_header
+    print '   '
+    (0..board_size).each do |num|
+      print '  ' if num.zero?
+      print " #{num.to_s.black}".on_green
+    end
+    puts
+  end
+
+  def print_row_header(index)
+    print '   ' + (' ' + index.to_s.black).on_green + ' '
+  end
+
+  def render_grid_mines
+    print_col_header
+
+    @board.grid_mines.each_with_index do |row, index|
+      print_row_header(index)
       row.each { |square| print square.content }
       puts
     end
