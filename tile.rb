@@ -2,9 +2,11 @@ class Tile
   attr_reader :revealed, :content
 
   def initialize
-    @revealed = false
-    @has_mine = false
-    @content = '*'
+    @content             = '  '
+    @revealed            = false
+    @has_mine            = false
+    @coordinates         = []
+    @adjacent_mine_count = 0
   end
 
   def plant_mine
