@@ -20,7 +20,7 @@ class Tile
     @has_mine
   end
 
-  def reveal
+  def reveal_tile
     @revealed = true
     @content = ' '
   end
