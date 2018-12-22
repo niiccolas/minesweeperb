@@ -1,5 +1,6 @@
 class Tile
-  attr_reader :revealed, :content
+  attr_reader :revealed
+  attr_accessor :adjacent_mine_count, :content, :coordinates
 
   def initialize
     @content             = '  '
