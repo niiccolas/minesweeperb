@@ -141,9 +141,40 @@ class MineSweeper
 
   def reveal(position)
     row, col = position
-    @board.num_revealed_tiles += 1
-    @board.grid_mines[row][col].reveal_tile
-    @board.grid_player[row][col] = @board.grid_mines[row][col].content
+    @board.num_revealed += 1
+    @board.model[row][col].reveal_tile
+    @board.vue[row][col] = @board.model[row][col].content
+  end
+
+  def reveal_around_blank(center)
+    queue = []
+    queue << center
+
+    until queue.empty?
+      coord = queue.shift
+      deltas = [
+        [-1, -1], [-1, 0], [-1, 1],
+        [ 0, -1],          [ 0, 1],
+        [ 1, -1], [ 1, 0], [ 1, 1],
+      ]
+
+      deltas.each do |delta|
+        row = (coord[0] + delta[0])
+        pos = (coord[1] + delta[1])
+
+        unless row < 0 || row > @board.board_size - 1 || pos < 0 || pos > @board.board_size - 1
+          if @board.model[row][pos].is_adjacent_mine? &&
+             !@board.model[row][pos].revealed?
+            reveal([row, pos])
+          elsif @board.model[row][pos].empty? &&
+                !@board.model[row][pos].is_adjacent_mine? &&
+                !@board.model[row][pos].revealed?
+            queue << [row, pos]
+            reveal([row, pos])
+          end
+        end
+      end
+    end
   end
 end
 
