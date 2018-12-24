@@ -52,4 +52,12 @@ class Tile
   def reveal_tile
     @revealed = true
   end
+
+  def revealed?
+    @revealed
+  end
+
+  def is_adjacent_mine?
+    @adjacent_mine_count > 0
+  end
 end

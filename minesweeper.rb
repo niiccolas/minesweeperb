@@ -60,7 +60,7 @@ class MineSweeper
       terminate_if_win
 
       position = position_input
-      reveal(position)
+      process_user_input(position)
     end
 
     game_over(position)
