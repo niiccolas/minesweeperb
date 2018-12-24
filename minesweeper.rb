@@ -66,9 +66,23 @@ class MineSweeper
     game_over(position)
   end
 
-  def terminate_if_won
-    if @board.num_revealed_tiles == ((@board.board_size**2) - @board.num_mines)
-      puts "\nCongratulations, you won! ✌️ \n".black.on_green
+  def process_user_input(position)
+    # if this tile has stats
+    if @board.model[position[0]][position[1]].is_adjacent_mine?
+      reveal(position)
+    # if this tile is mined
+    elsif @board.model[position[0]][position[1]].mined?
+      game_over(position)
+    # if this tile is empty
+    else
+      reveal(position)
+      reveal_around_blank(position)
+    end
+  end
+
+  def terminate_if_win
+    if @board.num_revealed == ((@board.board_size**2) - @board.num_mines)
+      puts "\nYou win! ✌️".green
       exit
     end
   end
