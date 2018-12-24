@@ -9,12 +9,11 @@ class MineSweeper
     @time_started = Time.now
   end
 
-  def render_grid_player
-    print "Minesweeperb"
+  def render_vue
+    print 'Minesweeperb'
     puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec.\n\n"
     print_col_header
-
-    @board.grid_player.each_with_index do |row, index|
+    @board.vue.each_with_index do |row, index|
       print_row_header(index)
       row.each { |tile| print tile }
       puts
@@ -43,10 +42,9 @@ class MineSweeper
     end
   end
 
-  def render_grid_mines
+  def render_model
     print_col_header
-
-    @board.grid_mines.each_with_index do |row, index|
+    @board.model.each_with_index do |row, index|
       print_row_header(index)
       row.each { |square| print square.content }
       puts
@@ -57,9 +55,9 @@ class MineSweeper
     position = nil
     until position && mined?(position)
       system('clear')
-      render_grid_player
-      # render_grid_mines
-      terminate_if_won
+      render_vue
+      render_model
+      terminate_if_win
 
       position = position_input
       reveal(position)
@@ -76,7 +74,7 @@ class MineSweeper
   end
 
   def game_over(position)
-    @board.grid_mines.each do |row|
+    @board.model.each do |row|
       row.each do |e|
         reveal(e.coordinates) if e.mined?
       end
@@ -84,14 +82,14 @@ class MineSweeper
 
     system('clear')
     mark_losing_position(position)
-    render_grid_player
-    puts "\nYou stepped on it! Game over".black.on_red
-    puts && exit
+    render_vue
+    puts "\nGame over.".red
+    exit
   end
 
   def mark_losing_position(position)
     row, col = position
-    @board.grid_player[row][col] = @board.grid_mines[row][col].content.on_red
+    @board.vue[row][col] = @board.model[row][col].content.on_red
   end
 
   def position_input
@@ -126,17 +124,17 @@ class MineSweeper
   end
 
   def board_size
-    @board.grid_mines.length - 1
+    @board.model.length - 1
   end
 
   def mined?(position)
     row, col = position
-    @board.grid_mines[row][col].mined?
+    @board.model[row][col].mined?
   end
 
   def revealed?(position)
     row, col = position
-    @board.grid_mines[row][col].revealed
+    @board.model[row][col].revealed
   end
 
   def reveal(position)
