@@ -2,15 +2,15 @@ require_relative 'tile'
 require 'colorize'
 
 class Board
-  attr_reader   :grid_mines, :grid_player, :num_mines, :board_size
-  attr_accessor :num_revealed_tiles
+  attr_reader   :model, :vue, :num_mines, :board_size
+  attr_accessor :num_revealed
 
   def initialize(grid_size, num_mines)
-    @num_revealed_tiles = 0
-    @num_mines          = num_mines
-    @board_size         = grid_size
-    @grid_player        = Array.new(grid_size) { Array.new(grid_size) { ' * ' } }
-    @grid_mines         = Array.new(grid_size) { Array.new(grid_size) { Tile.new } }
+    @num_revealed = 0
+    @num_mines    = num_mines
+    @board_size   = grid_size
+    @vue          = Array.new(grid_size) { Array.new(grid_size) { ' * ' } }
+    @model        = Array.new(grid_size) { Array.new(grid_size) { Tile.new } }
 
     plant_mines(num_mines)
     count_adjacent_mines
@@ -24,20 +24,20 @@ class Board
         empty_position?(x, y) ? break : (x, y = random_position)
       end
 
-      @grid_mines[x][y].plant_mine
+      @model[x][y].plant_mine
     end
   end
 
   def random_position
-    [rand(@grid_mines.length), rand(@grid_mines.length)]
+    [rand(@model.length), rand(@model.length)]
   end
 
   def empty_position?(row, col)
-    @grid_mines[row][col].empty?
+    @model[row][col].empty?
   end
 
   def count_adjacent_mines
-    grid_mines.each_with_index do |row, row_index|
+    model.each_with_index do |row, row_index|
       row.each_index do |col_index|
         check_neighbours(row_index, col_index)
       end
@@ -45,7 +45,7 @@ class Board
   end
 
   def check_neighbours(row, col)
-    if grid_mines[row][col].content == ' 💩'
+    if model[row][col].content == ' 💩'
       (row - 1..row + 1).each do |row_index|
         # Skip row indices that are out of the board
         next if row_index < 0 || row_index > board_size - 1
@@ -57,8 +57,8 @@ class Board
                   # Skip current position
                   (row_index == row && col_index == col)
 
-          unless grid_mines[row_index][col_index].content == ' 💩'
-            grid_mines[row_index][col_index].count_adjacent_mine
+          unless model[row_index][col_index].content == ' 💩'
+            model[row_index][col_index].count_adjacent_mine
           end
         end
       end
@@ -66,9 +66,9 @@ class Board
   end
 
   def save_coordinates
-    grid_mines.each_with_index do |row, row_index|
+    model.each_with_index do |row, row_index|
       row.each_index do |col_index|
-        @grid_mines[row_index][col_index].coordinates = [row_index, col_index]
+        @model[row_index][col_index].coordinates = [row_index, col_index]
       end
     end
   end
