@@ -1,11 +1,12 @@
 class Tile
-  attr_reader :revealed
+  attr_reader :revealed, :flagged
   attr_accessor :adjacent_mine_count, :content, :coordinates
 
   def initialize
     @content             = '   '
     @revealed            = false
     @has_mine            = false
+    @flagged             = false
     @coordinates         = []
     @adjacent_mine_count = 0
   end
@@ -39,6 +40,14 @@ class Tile
     when 8
       @content = ' ' + @adjacent_mine_count.to_s.cyan + ' '
     end
+  end
+
+  def flag
+    @flagged = true
+  end
+
+  def unflag
+    @flagged = false
   end
 
   def empty?

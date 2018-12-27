@@ -11,7 +11,7 @@ class MineSweeper
 
   def render_vue
     print 'Minesweeperb'
-    puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec.\n\n"
+    puts " — 🧨 #{board.num_mines} ⏳ #{(Time.now - @time_started).floor} sec\n\n"
     print_col_header
     @board.vue.each_with_index do |row, index|
       print_row_header(index)
@@ -21,14 +21,12 @@ class MineSweeper
   end
 
   def print_col_header
-    # print '   '
     (0..board_size).each do |num|
       print '  ' if num.zero?
       if num < 10
         print "  #{num.to_s.black}".on_green
       else
         print " #{num.to_s.black}".on_green
-
       end
     end
     puts
@@ -38,7 +36,7 @@ class MineSweeper
     if index < 10
       print (' ' + index.to_s.black).on_green + ' '
     else
-      print (index.to_s.black).on_green + ' '
+      print index.to_s.black.on_green + ' '
     end
   end
 
@@ -53,36 +51,68 @@ class MineSweeper
 
   def play
     position = nil
-    until position && mined?(position)
+    until position && mined?(position) && !flagged?(position) #! faire distingo entre position & command
       system('clear')
       render_vue
-      render_model
+      # render_model
       terminate_if_win
 
       position = position_input
-      process_user_input(position)
-    end
 
+      if flagging?(position)
+        flag(position)
+      else
+        process_user_input(position)
+      end
+    end
     game_over(position)
   end
 
+  def flagging?(position)
+    position[:flag]
+  end
+
+  def flagged?(position)
+    row, col = position[:pos]
+    @board.model[row][col].flagged
+  end
+
+  def flag(position)
+    row, col = position[:pos]
+
+    if @board.model[row][col].flagged
+      @board.model[row][col].unflag
+      @board.vue[row][col] = ' * '
+    else
+      @board.model[row][col].flag
+      @board.vue[row][col] = ' 🚩'
+    end
+  end
+
   def process_user_input(position)
+    row, col = position[:pos]
+
+    #! IF NOT FLAGGED, PROCEED TO THE REVELATIONS
+    if flagged?(position)
+      puts "Impossible: This position is flagged".red
+      sleep(1.5)
+
     # if this tile has stats
-    if @board.model[position[0]][position[1]].is_adjacent_mine?
-      reveal(position)
+    elsif @board.model[row][col].is_adjacent_mine?
+      reveal(position[:pos])
     # if this tile is mined
-    elsif @board.model[position[0]][position[1]].mined?
-      game_over(position)
+    elsif @board.model[row][col].mined?
+      game_over(position[:pos])
     # if this tile is empty
     else
-      reveal(position)
-      reveal_around_blank(position)
+      reveal(position[:pos])
+      reveal_around_blank(position[:pos])
     end
   end
 
   def terminate_if_win
     if @board.num_revealed == ((@board.board_size**2) - @board.num_mines)
-      puts "\nYou win! ✌️".green
+      puts "\nYou win!".green
       exit
     end
   end
@@ -106,35 +136,48 @@ class MineSweeper
     @board.vue[row][col] = @board.model[row][col].content.on_red
   end
 
-  def position_input
-    puts  "\nEnter a position (e.g., '0,2')"
-    print '> '
+  def player_input
+    get_input = gets.chomp
 
-    position = gets.chomp.split(',').map(&:to_i)
+    player_input = { pos: [], flag: nil }
+    player_input[:pos] << Integer(get_input[0]) rescue nil
+    player_input[:pos] << Integer(get_input[1]) rescue nil
+    player_input[:flag] = get_input[2] == 'F'
+
+    player_input
+  end
+
+  def position_input
+    puts "\nEnter the coordinates of a tile to reveal it"
+    puts "Add 'F' to flag (e.g. '01F')"
+    print '> '
+    input = player_input
+
     loop do
-      unless valid_input?(position)
-        puts "ERROR! Enter two comma separated numbers, each between 0 and #{board_size}".red
+      unless valid_input?(input)
+        puts "ERROR! Enter coordinates between 0 and #{board_size}".red
+        puts "Add 'F' to flag (e.g. '01F')".red
         print '> '
-        position = gets.chomp.split(',').map(&:to_i)
+        input = player_input
         redo
       end
 
-      if revealed?(position)
-        puts 'Position already revealed! Try again'.red
+      if revealed?(input)
+        puts 'Position already revealed!'.red
         print '> '
-        position = gets.chomp.split(',').map(&:to_i)
+        input = player_input
         redo
       else
         break
       end
     end
-    position
+    input
   end
 
   def valid_input?(input)
-    input.length == 2 &&
-      input.all? { |el| el.is_a? Integer } &&
-      input.all? { |el| el.between?(0, board_size) }
+    input[:pos].length == 2 &&
+      input[:pos].reduce(&:+) <= (board_size * 2) &&
+      input[:flag] == !!input[:flag]
   end
 
   def board_size
@@ -142,13 +185,12 @@ class MineSweeper
   end
 
   def mined?(position)
-    row, col = position
+    row, col = position[:pos]
     @board.model[row][col].mined?
   end
 
   def revealed?(position)
-    row, col = position
-    @board.model[row][col].revealed
+    @board.model[position[:pos][0]][position[:pos][1]].revealed
   end
 
   def reveal(position)
