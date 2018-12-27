@@ -232,5 +232,5 @@ class MineSweeper
   end
 end
 
-ms = MineSweeper.new(5, 2)
+ms = MineSweeper.new
 ms.play
